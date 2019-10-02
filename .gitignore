@@ -318,3 +318,4 @@ yarn-debug.log*
 !/storage/.keep
 
 /.idea/
+/Gemfile.lock
