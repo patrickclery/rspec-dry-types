@@ -1,42 +1,44 @@
-# Rspec::Dry::Types
+# Dry::Types for RSpec
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rspec/dry/types`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'rspec-dry-types'
+`rspec-dry-types` makes type-checking in Test-Driven Development easier by replacing RSpec's default type checkers with ones that check values using the [dry-types gem](http://dry-rb.org/gems/dry-types/). 
+ 
+ This:
+ 
+ ```ruby
+expect(subject).to be_a(String)
 ```
 
-And then execute:
+Becomes this:
 
-    $ bundle
+```ruby
+expect(subject).to be_a(Types['strict.string'])
+```
+ 
+## Usage:
 
-Or install it yourself as:
 
-    $ gem install rspec-dry-types
+```ruby
+require 'rspec-dry-types'
+RSpec.describe "Woptober" do
+  include RSpec::Matchers::DryType
 
-## Usage
+  let(:a_string) { "Gucci Mane" }
+  let(:a_integer) { 1017 }
+  let(:a_integer_string) { "1017" }
+  let(:a_symbol_string) { :la_flare }
 
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+  it 'validates the types' do
+    expect(a_string).to be_a(Dry::Types['strict.string'])
+    expect(a_integer).to be_an(Dry::Types['strict.integer'])
+    expect(a_integer_string).to be_a_kind_of(Dry::Types['coercible.string'])
+    expect(a_symbol_string).to be_of_type(Dry::Types['coercible.string'])
+  end
+end
+```
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rspec-dry-types. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
