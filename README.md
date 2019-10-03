@@ -16,11 +16,10 @@ expect(subject).to be_a(Dry::Types['strict.string'])
  
 ## Usage:
 
-
 ```ruby
 require 'rspec-dry-types'
 RSpec.describe "Woptober" do
-  include RSpec::Matchers::DryType
+  include RSpec::Matchers::DryTypes
 
   let(:a_string) { "Gucci Mane" }
   let(:a_integer) { 1017 }

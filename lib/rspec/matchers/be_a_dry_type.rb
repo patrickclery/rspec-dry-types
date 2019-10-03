@@ -12,7 +12,12 @@ module RSpec::Matchers
                                    "the actual object responds to #kind_of? method " \
                                    "but a `NoMethodError` was encountered instead."
         end
-        expected[actual]
+        begin
+          expected[actual]
+          true
+        rescue
+          false
+        end
       end
     end
 
