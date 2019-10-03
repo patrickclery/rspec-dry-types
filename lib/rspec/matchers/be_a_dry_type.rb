@@ -5,15 +5,28 @@ module RSpec::Matchers
   module DryTypes
     extend RSpec::Matchers::DSL
 
-    matcher :be_of_type do |expected|
+    matcher :be_of_type do |expected, strict: true|
       match do |actual|
-        unless expected.kind_of?(Dry::Types::Type)
-          raise ::ArgumentError, "The `be_of_type` matcher requires that " \
-                                   "the actual object responds to #kind_of? method " \
-                                   "but a `NoMethodError` was encountered instead."
+        if expected.kind_of?(Dry::Types::Type)
+          constraint = expected
+        elsif expected.kind_of?(Symbol)
+          if [:string, :integer, :float, :nil, :symbol, :array, :hash].include?(expected)
+            key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s}"
+            begin
+              constraint = Dry::Types[key]
+            rescue
+              raise ::ArgumentError, "`be_of_type` invalid symbol"
+            end
+          end
+        else
+          raise ::ArgumentError, "The `be_of_type` matcher requires either " \
+                                 "a Dry::Types::Type or a symbol that references " \
+                                 "a Dry::Types::Type"
         end
+
+        # If the constraint throws an error, return false
         begin
-          expected[actual]
+          constraint[actual]
           true
         rescue
           false
