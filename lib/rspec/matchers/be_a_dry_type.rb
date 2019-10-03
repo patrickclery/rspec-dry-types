@@ -9,15 +9,26 @@ module RSpec::Matchers
       match do |actual|
         if expected.kind_of?(Dry::Types::Type)
           constraint = expected
-        elsif expected.kind_of?(Symbol)
-          if [:string, :integer, :float, :nil, :symbol, :array, :hash].include?(expected)
-            key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s}"
-            begin
-              constraint = Dry::Types[key]
-            rescue
-              raise ::ArgumentError, "`be_of_type` invalid symbol"
-            end
+
+          # Using a symbol
+        elsif expected.kind_of?(Symbol) && [:string, :integer, :float, :nil, :symbol, :array, :hash].include?(expected)
+          key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s}"
+          begin
+            constraint = Dry::Types[key]
+          rescue
+            raise ::ArgumentError, "`be_of_type` invalid symbol"
           end
+
+          # This allows backwards-compat with regular be_a(String) style expectations
+        elsif exp7ected.kind_of?(Class) && [String, Integer, Float, NilClass, Symbol, Array, Hash].include?(expected)
+          key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s.downcase}"
+          begin
+            constraint = Dry::Types[key]
+          rescue
+            raise ::ArgumentError, "`be_of_type` invalid symbol"
+          end
+
+          # Wrong input
         else
           raise ::ArgumentError, "The `be_of_type` matcher requires either " \
                                  "a Dry::Types::Type or a symbol that references " \
