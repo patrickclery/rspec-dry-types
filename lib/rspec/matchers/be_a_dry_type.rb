@@ -20,7 +20,7 @@ module RSpec::Matchers
           end
 
           # This allows backwards-compat with regular be_a(String) style expectations
-        elsif exp7ected.kind_of?(Class) && [String, Integer, Float, NilClass, Symbol, Array, Hash].include?(expected)
+        elsif expected.kind_of?(Class) && [String, Integer, Float, NilClass, Symbol, Array, Hash].include?(expected)
           key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s.downcase}"
           begin
             constraint = Dry::Types[key]
