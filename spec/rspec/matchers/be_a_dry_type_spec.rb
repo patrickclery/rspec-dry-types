@@ -1,14 +1,14 @@
 require 'rspec/expectations'
 require 'rspec/matchers/be_a_dry_type'
 
-RSpec.describe RSpec::Matchers do
+RSpec.describe "check types using be_of_type" do
   include RSpec::Matchers::DryTypes
 
   it 'passes the test when the actual value is of the expected Dry::Type' do
-    expect('a string').to be_a(Dry::Types['strict.string'])
-    expect(123).to be_an(Dry::Types['strict.integer'])
+    expect('a string').to be_of_type(Dry::Types['strict.string'])
+    expect(123).to be_of_type(Dry::Types['strict.integer'])
     expect(0.123).to be_of_type(Dry::Types['strict.float'])
-    expect(123).to be_of_type(Dry::Types['coercible.string'])
+    expect("123").to be_of_type(Dry::Types['coercible.integer'])
   end
 
   it 'overrides the default RSpec type matchers' do
