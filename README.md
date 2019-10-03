@@ -31,6 +31,13 @@ RSpec.describe "Woptober" do
     expect(a_integer_string).to be_a_kind_of(:string, strict: false)
     expect(a_symbol_string).to be_of_type(:symbol)
   end
+
+  it 'is backwards compat with be_a' do
+    expect(a_string).to be_of_type(String)
+    expect(a_integer).to be_an(Integer)
+    expect(a_integer_string).to be_a_kind_of(String, strict: false)
+    expect(a_symbol_string).to be_of_type(Symbol)
+  end
 end
 ```
 
