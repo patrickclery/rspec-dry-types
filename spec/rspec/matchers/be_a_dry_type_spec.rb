@@ -1,7 +1,6 @@
 require 'rspec/expectations'
 require 'rspec/matchers/be_a_dry_type'
 
-RSpec::Matchers::DryTypes
 RSpec.describe RSpec::Matchers do
   include RSpec::Matchers::DryTypes
 
