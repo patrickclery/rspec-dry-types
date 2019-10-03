@@ -1,3 +1,4 @@
+require 'dry-types'
 require 'rspec/expectations'
 require 'rspec/matchers/be_a_dry_type'
 

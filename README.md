@@ -11,7 +11,7 @@ expect(subject).to be_a(String)
 Becomes this:
 
 ```ruby
-expect(subject).to be_a(Types['strict.string'])
+expect(subject).to be_a(Dry::Types['strict.string'])
 ```
  
 ## Usage:
