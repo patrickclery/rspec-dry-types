@@ -43,9 +43,14 @@ RSpec.describe "Woptober" do
   end
 
   it 'is backwards compat with be_a' do
-    expect(a_string).to be_of_type(String)
-    expect(a_integer).to be_an(Integer)
-    expect(a_integer_string).to be_a_kind_of(String, strict: false)
-    expect(a_symbol_string).to be_of_type(Symbol)
+    expect("I'm so icy").to be_of_type(String)
+    expect(nil).to be_of_type(NilClass)
+    expect(123).to be_an(Integer)
+    expect({}).to be_an(Hash)
+    expect(:symbol).to be_a(Symbol)
+    expect({ goo: "wop" }).to be_an(Hash)
+    expect([]).to be_an(Array)
+    expect(123).to be_a_kind_of(String, strict: false)
+    expect(:symbol).to be_of_type(String, strict: false)
   end
 end

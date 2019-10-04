@@ -7,18 +7,18 @@ module RSpec::Matchers
 
     matcher :be_of_type do |expected, strict: true|
       match do |actual|
-        if expected.kind_of?(Dry::Types::Type)
+        if expected == NilClass
+          constraint = Dry::Types['nil']
+        elsif expected.kind_of?(Dry::Types::Type)
           constraint = expected
-
           # Using a symbol
-        elsif expected.kind_of?(Symbol) && [:string, :integer, :float, :nil, :symbol, :array, :hash].include?(expected)
+        elsif expected.kind_of?(Symbol) or expected === NilClass
           key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s}"
-          begin
-            constraint = Dry::Types[key]
-          rescue
+          key.gsub! /^.*nil(class)?.*/, 'nil'
+          unless Dry::Types.type_keys.include?(key)
             raise ::ArgumentError, "`be_of_type` invalid symbol"
           end
-
+          constraint = Dry::Types[key]
           # This allows backwards-compat with regular be_a(String) style expectations
         elsif expected.kind_of?(Class) && [String, Integer, Float, NilClass, Symbol, Array, Hash].include?(expected)
           key = "#{ strict ? 'strict' : 'coercible'}.#{expected.to_s.downcase}"
