@@ -38,6 +38,7 @@ RSpec.describe "Woptober" do
   it 'validates the types' do
     expect(a_string).to be_of_type(:string)
     expect(a_integer).to be_an(:integer)
+    # noinspection RubyArgCount
     expect(a_integer_string).to be_a_kind_of(:string, strict: false)
     expect(a_symbol_string).to be_of_type(:symbol)
   end
@@ -46,9 +47,8 @@ RSpec.describe "Woptober" do
     expect("I'm so icy").to be_of_type(String)
     expect(nil).to be_of_type(NilClass)
     expect(123).to be_an(Integer)
-    expect({}).to be_an(Hash)
     expect(:symbol).to be_a(Symbol)
-    expect({ goo: "wop" }).to be_an(Hash)
+    expect({ goo: "wop" }).to be_a(Hash)
     expect([]).to be_an(Array)
     expect(123).to be_a_kind_of(String, strict: false)
     expect(:symbol).to be_of_type(String, strict: false)
