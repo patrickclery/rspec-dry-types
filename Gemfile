@@ -1,5 +1,7 @@
 source "https://rubygems.org"
 
+gem 'codecov'
+gem 'simplecov'
 gem 'rspec-expectations'
 gem 'dry-types'
 
