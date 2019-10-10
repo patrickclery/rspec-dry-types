@@ -5,17 +5,19 @@ module RSpec::Matchers
   module DryTypes
     extend RSpec::Matchers::DSL
 
-    matcher :be_of_type do |expected, strict: false|
+    matcher :be_of_type do |expected, strict: true|
       # If you provide a string value, it will use dry-types,
       # if you provide anything else, it will use RSpec-expectations
       ref = expected.to_s.downcase
       ref = "coercible.#{ref}" unless strict or ref === 'nil'
       match do |actual|
+        # Let it throw errors if it has to
         if Dry::Types.type_keys.include?(ref)
+          # Only use dry-types if a valid key is given
           constraint = Dry::Types[ref]
           constraint.valid?(actual)
         else
-          # Super
+          # Otherwise fallback to RSpec built-in matcher
           BuiltIn::BeAKindOf.new(expected).matches?(actual)
         end
       end

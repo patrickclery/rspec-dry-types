@@ -14,6 +14,18 @@ RSpec.describe "check types using be_of_type" do
     expect(nil).to be_of_type(:nil)
   end
 
+  it 'support dry-types string references' do
+    expect('a string').to be_of_type('string')
+    expect('a string').to be_of_type('strict.string')
+    expect(123).to be_of_type('integer')
+    expect(123).to be_of_type('strict.integer')
+    expect(0.123).to be_of_type('float')
+    expect(0.123).to be_of_type('coercible.integer')
+    expect("123").to be_of_type('integer', strict: false)
+    expect(nil).to be_of_type('string', strict: false)
+    expect(nil).to be_of_type('nil')
+  end
+
   it 'overrides the default RSpec type matchers' do
     expect('a string').to be_a(:string)
     expect('a string').to be_an(:string)
@@ -27,26 +39,3 @@ RSpec.describe "check types using be_of_type" do
 
 end
 
-# From README.md
-RSpec.describe "Woptober" do
-  include RSpec::Matchers::DryTypes
-
-  let(:a_string) { "Gucci Mane" }
-  let(:a_integer) { 1017 }
-  let(:a_integer_string) { "1017" }
-  let(:a_symbol_string) { :la_flare }
-
-  it 'validates the types' do
-    expect(a_string).to be_of_type(:string)
-    expect(a_integer).to be_an(:integer)
-    expect(a_integer_string).to be_a_kind_of(:string, strict: false)
-    expect(a_symbol_string).to be_of_type(:symbol)
-  end
-
-  it 'is backwards compat with be_a' do
-    expect(a_string).to be_of_type(String)
-    expect(a_integer).to be_an(Integer)
-    expect(a_integer_string).to be_a_kind_of(String, strict: false)
-    expect(a_symbol_string).to be_of_type(Symbol)
-  end
-end
