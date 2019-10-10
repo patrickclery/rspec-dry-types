@@ -20,8 +20,9 @@ RSpec.describe "check types using be_of_type" do
     expect('a string').to be_a_kind_of(:string)
   end
 
-  it 'fails when given a non-dry type as a parameter' do
-    expect { expect('a string').to be_a(Object) }.to raise_error(ArgumentError)
+  it 'succeeds when given a non-dry type as a parameter' do
+    expect('a string').to be_of_type(Object)
+    expect(123).to be_of_type(String, strict: false)
   end
 
 end
