@@ -16,6 +16,7 @@ expect("123").to be_a(Integer) # FAILS
 expect("123").to be_a(Integer, strict: false) # PASSES
 expect("123").to be_a(Float, strict: false) # PASSES
 expect("123").to be_a('coercible.integer') # PASSES - using references from the dry-types docs
+expect("123").to be_a(:integer) # PASSES - using references from the dry-types docs
 ```
 
 ```ruby
