@@ -1,19 +1,26 @@
 [![CircleCI](https://circleci.com/gh/patrickclery/rspec-dry-types.svg?style=svg)](https://circleci.com/gh/patrickclery/rspec-dry-types)
 
-# Dry::Types for RSpec
+# `dry-types` for RSpec
 
-`rspec-dry-types` makes type-checking in Test-Driven Development easier by replacing RSpec's default type checkers with ones that check values using the [dry-types gem](http://dry-rb.org/gems/dry-types/). 
+`rspec-dry-types` replace RSpec's default type checkers with a more robust set of type-checking tools powered by the [dry-types gem](http://dry-rb.org/gems/dry-types/). 
+
+Normally, something like this doesn't work:
  
- This:
- 
- ```ruby
-expect(subject).to be_a(String)
+```ruby
+expect("123").to be_a(Integer) # FAILS
 ```
 
-Becomes this:
+`rspec-dry-types` allow you to tighten or loosen type-constraints in RSpec:
 
 ```ruby
-expect(subject).to be_a(Dry::Types['strict.string'])
+expect("123").to be_a(Integer, strict: false) # PASSES
+expect("123").to be_a(Float, strict: false) # PASSES
+expect("123").to be_a('coercible.integer') # PASSES - using references from the dry-types docs
+```
+
+```ruby
+expect("123").not_to be_a('strict.integer') # PASSES - It's not an INTEGER, it's a STRING
+expect("123").to be_a('coercible.integer') # PASSES - The test coerces the value to an integer BEFORE testing => "123" becomes 123
 ```
  
 ## Usage:
