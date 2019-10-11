@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/patrickclery/rspec-dry-types.svg?style=svg)](https://circleci.com/gh/patrickclery/rspec-dry-types)
+
 # Dry::Types for RSpec
 
 `rspec-dry-types` makes type-checking in Test-Driven Development easier by replacing RSpec's default type checkers with ones that check values using the [dry-types gem](http://dry-rb.org/gems/dry-types/). 
