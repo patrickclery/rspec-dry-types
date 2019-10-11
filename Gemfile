@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem 'bundler', '~> 2'
 gem 'codecov', '~> 0.1.15'
 gem 'simplecov', '~> 0.17.1'
 gem 'rspec', '~> 3.8'
