@@ -27,6 +27,14 @@ RSpec.describe "check types using be_of_type" do
     expect(nil).to be_of_type('nil')
   end
 
+  # Strings must reference the dry-types docs
+  it 'is backwards compat with be_a' do
+    expect('a string').to be_a(String)
+    expect('a string').to be_a_kind_of('strict.string')
+    expect(123).to be_an(Integer)
+    expect(123).to be_an('integer')
+  end
+
   it 'can use a class to check if its a type' do
     # Check inheritance
     expect(String).to be_of_type(Object)
