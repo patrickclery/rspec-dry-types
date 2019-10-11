@@ -2,7 +2,7 @@ require "bundler/setup"
 require 'dry-types'
 require 'rspec'
 require 'rspec/expectations'
-require "rspec/matchers/be_a_dry_type"
+require "rspec/matchers/be_of_type"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

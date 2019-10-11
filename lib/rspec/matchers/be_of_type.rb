@@ -17,8 +17,8 @@ module RSpec::Matchers
           constraint = Dry::Types[ref]
           constraint.valid?(actual)
         else
-          # Otherwise fallback to RSpec built-in matcher
-          BuiltIn::BeAKindOf.new(expected).matches?(actual)
+          # Otherwise fallback to default
+          actual.kind_of?(expected)
         end
       end
     end

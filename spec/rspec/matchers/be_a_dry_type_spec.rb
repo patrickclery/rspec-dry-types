@@ -1,11 +1,11 @@
 require 'dry-types'
 require 'rspec/expectations'
-require 'rspec/matchers/be_a_dry_type'
+require 'rspec/matchers/be_of_type'
 
 RSpec.describe "check types using be_of_type" do
   include RSpec::Matchers::DryTypes
 
-  it 'passes the test when the actual value is of the expected Dry::Type' do
+  it 'can use a symbol to expect a dry-type' do
     expect('a string').to be_of_type(:string)
     expect(123).to be_of_type(:integer)
     expect(0.123).to be_of_type(:float)
@@ -14,7 +14,8 @@ RSpec.describe "check types using be_of_type" do
     expect(nil).to be_of_type(:nil)
   end
 
-  it 'support dry-types string references' do
+  # Strings must reference the dry-types docs
+  it 'can use string to expect a dry-type' do
     expect('a string').to be_of_type('string')
     expect('a string').to be_of_type('strict.string')
     expect(123).to be_of_type('integer')
@@ -26,15 +27,18 @@ RSpec.describe "check types using be_of_type" do
     expect(nil).to be_of_type('nil')
   end
 
-  it 'overrides the default RSpec type matchers' do
-    expect('a string').to be_a(:string)
-    expect('a string').to be_an(:string)
-    expect('a string').to be_a_kind_of(:string)
-  end
-
-  it 'succeeds when given a non-dry type as a parameter' do
+  it 'can use a class to check if its a type' do
+    # Check inheritance
+    expect(String).to be_of_type(Object)
     expect('a string').to be_of_type(Object)
+
+    # Check coercion
     expect(123).to be_of_type(String, strict: false)
+    expect(0.123).not_to be_of_type(Integer)
+    expect(0.123).to be_of_type(Integer, strict: false)
+
+    expect(123).to be_of_type(Object)
+    expect(123).to be_of_type(Object)
   end
 
 end
