@@ -1,32 +1,18 @@
 [![CircleCI](https://circleci.com/gh/patrickclery/rspec-dry-types.svg?style=svg)](https://circleci.com/gh/patrickclery/rspec-dry-types)
 
-# `dry-types` for RSpec
+> Speed up test-driven development with looser or stronger type-checking in your RSpec tests
 
-`rspec-dry-types` replace RSpec's default type checkers with a more robust set of type-checking tools powered by the [dry-types gem](http://dry-rb.org/gems/dry-types/). 
+The [rspec-dry-types](https://github.com/patrickclery/rspec-dry-types) gem is a drop-in replacement for RSpec's `be_a_kind_of()` that allows you to TIGHTEN or LOOSEN what object types you expect returned.
 
-Normally, something like this doesn't work:
- 
-```ruby
-expect("123").to be_a(Integer) # FAILS
-```
+Powered by the [dry-types gem](https://dry-rb.org/gems/dry-types/1.2/built-in-types/), you can find a list of all the reference keys for supported types [dry-types documentation for "Built-in Types"](https://dry-rb.org/gems/dry-types/1.2/built-in-types/).
 
-`rspec-dry-types` allow you to tighten or loosen type-constraints in RSpec:
+## USAGE:
 
 ```ruby
-expect("123").to be_a(Integer, strict: false) # PASSES
-expect("123").to be_a(Float, strict: false) # PASSES
-expect("123").to be_a('coercible.integer') # PASSES - using references from the dry-types docs
-expect("123").to be_a(:integer) # PASSES - using references from the dry-types docs
-```
+require 'dry-types'
+require 'rspec/expectations'
+require 'rspec/matchers/be_of_type'
 
-```ruby
-expect("123").not_to be_a('strict.integer') # PASSES - It's not an INTEGER, it's a STRING
-expect("123").to be_a('coercible.integer') # PASSES - The test coerces the value to an integer BEFORE testing => "123" becomes 123
-```
- 
-## Usage:
-
-```ruby
 RSpec.describe "check types using be_of_type" do
   include RSpec::Matchers::DryTypes
 
@@ -64,14 +50,12 @@ RSpec.describe "check types using be_of_type" do
     # Check inheritance
     expect(String).to be_of_type(Object)
     expect('a string').to be_of_type(Object)
+    expect(123).to be_of_type(Object)
 
     # Check coercion
     expect(123).to be_of_type(String, strict: false)
     expect(0.123).not_to be_of_type(Integer)
     expect(0.123).to be_of_type(Integer, strict: false)
-
-    expect(123).to be_of_type(Object)
-    expect(123).to be_of_type(Object)
   end
 
 end
