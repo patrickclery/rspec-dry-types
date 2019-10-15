@@ -2,61 +2,96 @@
 
 > Speed up test-driven development with looser or stronger type-checking in your RSpec tests
 
-The [rspec-dry-types](https://github.com/patrickclery/rspec-dry-types) gem is a drop-in replacement for RSpec's `be_a_kind_of()` that allows you to TIGHTEN or LOOSEN what object types you expect returned.
+[rspec-dry-types](https://github.com/patrickclery/rspec-dry-types) connects RSpec to [dry-types](https://dry-rb.org/gems/dry-types/1.2/built-in-types/) so you have access to extra type-checking helpers.
 
-Powered by the [dry-types gem](https://dry-rb.org/gems/dry-types/1.2/built-in-types/), you can find a list of all the reference keys for supported types [dry-types documentation for "Built-in Types"](https://dry-rb.org/gems/dry-types/1.2/built-in-types/).
+## Usage
 
-## USAGE:
+The best way to describe it, is to look at the actual RSpec tests used for this gem:
 
 ```ruby
-require 'dry-types'
-require 'rspec/expectations'
+require 'rspec'
 require 'rspec/matchers/be_of_type'
 
 RSpec.describe "check types using be_of_type" do
   include RSpec::Matchers::DryTypes
 
-  it 'can use a symbol to expect a dry-type' do
+  it 'can expect a dry-type (by symbol)' do
     expect('a string').to be_of_type(:string)
     expect(123).to be_of_type(:integer)
     expect(0.123).to be_of_type(:float)
-    expect("123").to be_of_type(:integer, strict: false)
-    expect(nil).to be_of_type(:string, strict: false)
     expect(nil).to be_of_type(:nil)
+    expect({}).to be_of_type(:hash)
+    expect([]).to be_of_type(:array)
+    expect(true).to be_of_type(:bool)
+    expect(false).to be_of_type(:bool)
+    expect(Date.new(2001, 2, 3)).to be_of_type(:date)
+    expect(Time.new(2001, 2, 3, 4, 5, 6)).to be_of_type(:time)
+    expect(DateTime.new(2001, 2, 3, 4, 5, 6)).to be_of_type(:date_time)
+    expect(:abc).to be_of_type(:symbol)
+  end
+
+  it 'can expect any type' do
+    # Any type
+    expect('a string').to be_of_type(:any)
+    expect(123).to be_of_type(:any)
+    expect(0.123).to be_of_type(:any)
+    expect(nil).to be_of_type(:any)
+    expect({}).to be_of_type(:any)
+    expect([]).to be_of_type(:any)
+    expect(true).to be_of_type(:any)
+    expect(false).to be_of_type(:any)
+    expect(Date.new(2001, 2, 3)).to be_of_type(:any)
+    expect(Time.new(2001, 2, 3, 4, 5, 6)).to be_of_type(:any)
+    expect(DateTime.new(2001, 2, 3, 4, 5, 6)).to be_of_type(:any)
+    expect(:abc).to be_of_type(:any)
+    expect(0.1).to be_of_type(:any)
+  end
+
+  it 'can expect a value to be coercible into a type' do
+    # actual.to_s
+    expect(nil).to be_of_type(:string, strict: false)
+    expect(123).to be_of_type(:string, strict: false) # 123.to_s == "123"
+    expect(123).to be_of_type("coercible.string")
+
+    # actual.to_i
+    expect("123").to be_of_type(:integer, strict: false)
+    expect(0.123).not_to be_of_type(:integer)
+    expect(0.123).to be_of_type(:integer, strict: false)
   end
 
   # Strings must reference the dry-types docs
-  it 'can use string to expect a dry-type' do
-    expect('a string').to be_of_type('string')
+  it 'can expect a dry-type (by string)' do
     expect('a string').to be_of_type('strict.string')
-    expect(123).to be_of_type('integer')
+    expect("123").to be_of_type('coercible.integer')
+    expect('a string').to be_of_type('strict.string')
     expect(123).to be_of_type('strict.integer')
-    expect(0.123).to be_of_type('float')
-    expect(0.123).to be_of_type('coercible.integer')
+    expect(0.123).to be_of_type('strict.float')
+    expect(nil).to be_of_type('strict.nil')
+    expect({}).to be_of_type('strict.hash')
+    expect([]).to be_of_type('strict.array')
+    expect(true).to be_of_type('strict.bool')
+    expect(false).to be_of_type('strict.bool')
+    expect(Date.new(2001, 2, 3)).to be_of_type('strict.date')
+    expect(Time.new(2001, 2, 3, 4, 5, 6)).to be_of_type('strict.time')
+    expect(DateTime.new(2001, 2, 3, 4, 5, 6)).to be_of_type('strict.date_time')
+    expect(:abc).to be_of_type('strict.symbol')
+
+    # with an optional flag
+    expect(123).to be_of_type('integer', strict: true)
     expect("123").to be_of_type('integer', strict: false)
-    expect(nil).to be_of_type('string', strict: false)
-    expect(nil).to be_of_type('nil')
   end
 
-  # Strings must reference the dry-types docs
-  it 'is backwards compat with be_a' do
-    expect('a string').to be_a(String)
-    expect('a string').to be_a_kind_of('strict.string')
-    expect(123).to be_an(Integer)
-    expect(123).to be_an('integer')
-  end
-
-  it 'can use a class to check if its a type' do
-    # Check inheritance
+  # Note: there is no 'object' type for `dry-types`
+  it 'can expect class inheritance of a type' do
+    # String/Integer inherit from Object
     expect(String).to be_of_type(Object)
-    expect('a string').to be_of_type(Object)
     expect(123).to be_of_type(Object)
-
-    # Check coercion
-    expect(123).to be_of_type(String, strict: false)
-    expect(0.123).not_to be_of_type(Integer)
-    expect(0.123).to be_of_type(Integer, strict: false)
+    expect('a string').to be_of_type(Object)
   end
 
 end
 ```
+
+> For a full list of types, checkout the [dry-types documentation](https://dry-rb.org/gems/dry-types/1.2/built-in-types/)
+
+If this project helps you, 
