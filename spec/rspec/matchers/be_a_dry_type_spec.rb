@@ -1,4 +1,4 @@
-require 'rspec/expectations'
+require 'rspec'
 require 'rspec/matchers/be_of_type'
 
 RSpec.describe "check types using be_of_type" do
