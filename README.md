@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/patrickclery/rspec-dry-types.svg?style=svg)](https://circleci.com/gh/patrickclery/rspec-dry-types)
+![RSpec](https://github.com/patrickclery/rspec-dry-types/workflows/Ruby/badge.svg)
 
 > Speed up test-driven development with looser or stronger type-checking in your RSpec tests
 
