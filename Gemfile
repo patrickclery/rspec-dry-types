@@ -5,7 +5,7 @@ gem 'simplecov', '~> 0.17.1'
 gem 'rspec', '~> 3.8'
 gem 'rspec-expectations', '~> 3.8'
 gem 'dry-types', '~> 1.0'
-gem 'rake', '~> 10.0'
+gem 'rake', '>= 12.3.3'
 
 # Specify your gem's dependencies in rspec-dry-types.gemspec
 gemspec
